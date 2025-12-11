@@ -1,19 +1,20 @@
 namespace Smdb.Core.Db;
+
 using Smdb.Core.Movies;
 public class MemoryDatabase
 {
-public List<Movie> Movies { get; }
-private int nextMovieId;
-public MemoryDatabase()
-{
-Movies = [];
-SeedMovies();
-nextMovieId = Movies.Count;
-}
-private void SeedMovies()
-{
-Movies.AddRange(new Movie[]
-{
+    public List<Movie> Movies { get; }
+    private int nextMovieId;
+    public MemoryDatabase()
+    {
+        Movies = [];
+        SeedMovies();
+        nextMovieId = Movies.Count;
+    }
+    private void SeedMovies()
+    {
+        Movies.AddRange(new Movie[]
+        {
 new Movie(1, "The Godfather", 1972, "A mafia patriarch hands the family empire to his reluctant son."),
 new Movie(2, "The Godfather Part II", 1974, "Michael consolidates power as flashbacks trace Vito Corleone’s rise."),
 new Movie(3, "The Dark Knight", 2008, "Batman faces the Joker, who pushes Gotham into chaos."),
@@ -64,9 +65,10 @@ new Movie(47, "Avengers: Endgame", 2019, "Survivors attempt a time-heist to undo
 new Movie(48, "Toy Story", 1995, "Rivalry between a cowboy doll and a space ranger turns to friendship."),
 new Movie(49, "Inside Out", 2015, "A girl’s emotions guide her through a difficult move."),
 new Movie(50, "The Social Network", 2010, "Facebook’s founding sparks friendship and legal battles.")
-});
-}
-public int NextMovieId()
-{return ++nextMovieId;
-}
+        });
+    }
+    public int NextMovieId()
+    {
+        return ++nextMovieId;
+    }
 }
