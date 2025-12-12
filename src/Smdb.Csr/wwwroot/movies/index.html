@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>All Movies • Simple Movie Database</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/styles/main.css" />
+</head>
+
+<body>
+    <header>
+        <h1>All Movies</h1>
+        <nav>
+            <ul>
+                <li><a href="/" class="btn">Home</a></li>
+                <li><a href="/movies/add.html" class="btn primary">Add Movie</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <div id="status" class="status">Loading movies...</div>
+            <div id="movies-list" class="movies-grid"></div>
+        </div>
+    </main>
+    <script type="module">
+        // Simple movie listing functionality
+        const statusEl = document.getElementById('status');
+        const moviesListEl = document.getElementById('movies-list');
+        
+        async function loadMovies() {
+            try {
+                statusEl.textContent = 'Loading movies...';
+                const response = await fetch('/api/movies');
+                
+                if (response.ok) {
+                    const movies = await response.json();
+                    displayMovies(movies);
+                } else {
+                    statusEl.textContent = 'Failed to load movies';
+                    statusEl.className = 'status error';
+                }
+            } catch (error) {
+                statusEl.textContent = 'Error loading movies: ' + error.message;
+                statusEl.className = 'status error';
+            }
+        }
+        
+        function displayMovies(movies) {
+            if (movies.length === 0) {
+                statusEl.textContent = 'No movies found. Add your first movie!';
+                statusEl.className = 'status';
+                return;
+            }
+            
+            statusEl.style.display = 'none';
+            moviesListEl.innerHTML = movies.map(movie => `
+                <div class="movie-card">
+                    <h3>${escapeHtml(movie.title)}</h3>
+                    <p class="year">${movie.year}</p>
+                    <p class="description">${escapeHtml(movie.description || 'No description available')}</p>
+                </div>
+            `).join('');
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        loadMovies();
+    </script>
+</body>
+
+</html>

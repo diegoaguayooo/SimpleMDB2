@@ -14,11 +14,11 @@ public class App : HttpServer
         router.Use(HttpUtils.StructuredLogging);
         router.Use(HttpUtils.CentralizedErrorHandling);
         router.Use(HttpUtils.AddResponseCorsHeaders);
-        router.Use(HttpUtils.DefaultResponse);
         router.Use(HttpUtils.ParseRequestUrl);
         router.Use(HttpUtils.ParseRequestQueryString);
+        router.UseSimpleRouteMatching(); // Move this BEFORE ServeStaticFiles
         router.Use(HttpUtils.ServeStaticFiles);
-        router.UseSimpleRouteMatching();
+        router.Use(HttpUtils.DefaultResponse);
 
         router.MapGet("/", LandingPageIndexRedirect);
         router.MapGet("/movies", MoviesPageIndexRedirect);
