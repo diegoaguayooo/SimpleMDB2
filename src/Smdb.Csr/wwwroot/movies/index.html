@@ -1,77 +1,49 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <title>All Movies • Simple Movie Database</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/styles/main.css" />
+<meta charset="utf-8" />
+<title>Movies • Simple Movie Database</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="/styles/main.css" />
+<script type="module" src="/scripts/movies/index.js" defer></script>
 </head>
-
 <body>
-    <header>
-        <h1>All Movies</h1>
-        <nav>
-            <ul>
-                <li><a href="/" class="btn">Home</a></li>
-                <li><a href="/movies/add.html" class="btn primary">Add Movie</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <div class="container">
-            <div id="status" class="status">Loading movies...</div>
-            <div id="movies-list" class="movies-grid"></div>
-        </div>
-    </main>
-    <script type="module">
-        // Simple movie listing functionality
-        const statusEl = document.getElementById('status');
-        const moviesListEl = document.getElementById('movies-list');
-        
-        async function loadMovies() {
-            try {
-                statusEl.textContent = 'Loading movies...';
-                const response = await fetch('/api/movies');
-                
-                if (response.ok) {
-                    const movies = await response.json();
-                    displayMovies(movies);
-                } else {
-                    statusEl.textContent = 'Failed to load movies';
-                    statusEl.className = 'status error';
-                }
-            } catch (error) {
-                statusEl.textContent = 'Error loading movies: ' + error.message;
-                statusEl.className = 'status error';
-            }
-        }
-        
-        function displayMovies(movies) {
-            if (movies.length === 0) {
-                statusEl.textContent = 'No movies found. Add your first movie!';
-                statusEl.className = 'status';
-                return;
-            }
-            
-            statusEl.style.display = 'none';
-            moviesListEl.innerHTML = movies.map(movie => `
-                <div class="movie-card">
-                    <h3>${escapeHtml(movie.title)}</h3>
-                    <p class="year">${movie.year}</p>
-                    <p class="description">${escapeHtml(movie.description || 'No description available')}</p>
-                </div>
-            `).join('');
-        }
-        
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        loadMovies();
-    </script>
+<header>
+<h1>Movies</h1>
+<nav>
+<ul>
+<li><a href="/" class="btn">Home</a></li>
+<li><a href="/movies/add.html" class="btn">Add Movie</a></li>
+</ul>
+</nav>
+</header>
+<main class="container">
+<div id="status" class="status">Loading...</div>
+<div class="controls">
+<span id="page-num" class="badge">Page 1</span>
+<a id="first" class="btn">First</a>
+<a id="prev" class="btn">Prev</a>
+<a id="next" class="btn">Next</a>
+<a id="last" class="btn">Last</a>
+<div class="page-size-container">
+<label for="page-size">Items per page:</label>
+<select id="page-size"></select>
+</div>
+</div>
+<div id="movie-list" class="grid cards" style="margin-top:12px;"></div>
+</main>
+<template id="movie-card">
+<div class="card">
+<h3>
+<span class="title"></span>
+<span class="badge year"></span>
+</h3>
+<div class="row-actions">
+<a class="btn btn-view">View</a>
+<a class="btn btn-edit">Edit</a>
+<button class="btn danger btn-delete" type="button">Remove</button>
+</div>
+</div>
+</template>
 </body>
-
 </html>
